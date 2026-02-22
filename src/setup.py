@@ -6,6 +6,12 @@ import stat
 import argparse
 from pathlib import Path
 
+if sys.platform == 'win32':
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except:
+        pass
+
 def get_project_root():
     return Path(__file__).parent.parent.resolve()
 
