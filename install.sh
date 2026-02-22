@@ -16,8 +16,8 @@ fi
 
 echo "📥 激活虚拟环境并安装依赖..."
 source .venv/bin/activate
-pip install --upgrade pip -q
-pip install -r requirements.txt -q
+pip install --upgrade pip -q -i https://pypi.tuna.tsinghua.edu.cn/simple
+pip install -r requirements.txt -q -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
     echo "🍎 macOS 平台检测..."
