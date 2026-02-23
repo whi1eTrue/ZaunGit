@@ -54,26 +54,22 @@ def create_hook_file():
     hooks_dir = get_hooks_dir()
     hooks_dir.mkdir(parents=True, exist_ok=True)
     
-    hook_file = hooks_dir / 'post-commit'
     main_py = get_project_root() / 'src' / 'main.py'
     venv_python = get_venv_python()
     
-    if sys.platform == 'win32':
-        hook_content = f'''@echo off
-"{venv_python}" "{main_py}"
-'''
-        hook_file = hooks_dir / 'post-commit.bat'
-    else:
-        hook_content = f'''#!/bin/sh
-"{venv_python}" "{main_py}"
+    main_py_str = str(main_py).replace('\\', '/')
+    venv_python_str = str(venv_python).replace('\\', '/')
+    
+    hook_file = hooks_dir / 'post-commit'
+    hook_content = f'''#!/bin/sh
+"{venv_python_str}" "{main_py_str}"
 '''
     
-    with open(hook_file, 'w', encoding='utf-8') as f:
+    with open(hook_file, 'w', encoding='utf-8', newline='\n') as f:
         f.write(hook_content)
     
-    if sys.platform != 'win32':
-        st = os.stat(hook_file)
-        os.chmod(hook_file, st.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+    st = os.stat(hook_file)
+    os.chmod(hook_file, st.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
     
     print(f'✅ Hook 文件已创建: {hook_file}')
     return hook_file
